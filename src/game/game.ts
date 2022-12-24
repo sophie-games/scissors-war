@@ -1,26 +1,35 @@
 import * as PIXI from "pixi.js";
 
 import { IEntity } from "./entity/entity";
-import Soldier, { ISoldier } from "./entity/soldier";
+import Agent, { IAgent } from "./entity/agent";
 import Vector2D from "./vector-2d";
+import Warrior from "./entity/warrior";
+import Mage from "./entity/mage";
 
 export default class Game {
   app: PIXI.Application;
 
-  private agents: Map<string, Soldier> = new Map();
+  private agents: Map<string, Agent> = new Map();
 
   constructor(app: PIXI.Application) {
     this.app = app;
   }
 
-  addSoldier(props: ISoldier) {
-    const soldier = new Soldier(props);
-    soldier.createSprite(this.app);
+  addWarrior(props: IAgent) {
+    const soldier = new Warrior(props);
+    soldier.init(this.app);
 
     this.agents.set(soldier.uuid, soldier);
   }
 
-  public moveAgentTo(agent: Soldier, x: number, y: number, speed?: number) {
+  addMage(props: IAgent) {
+    const soldier = new Mage(props);
+    soldier.init(this.app);
+
+    this.agents.set(soldier.uuid, soldier);
+  }
+
+  public moveAgentTo(agent: Agent, x: number, y: number, speed?: number) {
     let speedToUse = speed ? speed : agent.speed;
 
     const originalMovement = agent.getMovementTo(x, y, speedToUse);
@@ -97,7 +106,7 @@ export default class Game {
 
   public getTheCloserEnemyOf(position: Vector2D, team: number) {
     let distance = Number.POSITIVE_INFINITY;
-    let closerEnemy: Soldier | null = null;
+    let closerEnemy: Agent | null = null;
 
     this.agents.forEach((a) => {
       if (a.team === team || a.isDead) {
@@ -115,7 +124,7 @@ export default class Game {
     return closerEnemy!;
   }
 
-  public getTheCloserEnemyOfAgent(agent: Soldier) {
+  public getTheCloserEnemyOfAgent(agent: Agent) {
     return this.getTheCloserEnemyOf(agent.position, agent.team);
   }
 

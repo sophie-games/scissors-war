@@ -5,6 +5,7 @@ import Vector2D from "../vector-2d";
 import Entity, { IEntity } from "./entity";
 import { ShapeType, UNDEFINED } from "../shape-types";
 import { attackBonus } from "../attack-bonus";
+import textures from "../textures";
 
 const HP_BAR_WIDTH = 56;
 const HP_BAR_HEIGHT = 10;
@@ -49,18 +50,14 @@ export default class Shape extends Entity {
     this.createHpBar();
   }
 
-  protected createGraphic(app: PIXI.Application) {
-    throw new Error("Must be declared in subclass");
-  }
-
   protected createHpBar() {
     const maxHp = new PIXI.Graphics();
     maxHp.beginFill(0x4a0707);
     maxHp.drawRect(0, 0, HP_BAR_WIDTH, HP_BAR_HEIGHT);
     maxHp.endFill();
 
-    maxHp.position.x = this.width / 2 - HP_BAR_WIDTH / 2;
-    maxHp.position.y = -HP_BAR_HEIGHT - 10;
+    maxHp.position.x = -HP_BAR_WIDTH / 2;
+    maxHp.position.y = -this.gr.height / 2 - 24;
 
     const hp = new PIXI.Graphics();
     hp.beginFill(0xff0000);
@@ -126,5 +123,31 @@ export default class Shape extends Entity {
 
   die() {
     this.gr.destroy();
+  }
+
+  protected createGraphic(app: PIXI.Application) {
+    const gr = this.gr;
+
+    gr.beginFill(this.color);
+    gr.lineStyle(2, 0xfafad2);
+    gr.drawCircle(0, 0, this.width / 2);
+    gr.endFill();
+
+    gr.position.x = this.position.x;
+    gr.position.y = this.position.y;
+
+    // Sprite
+    const texture = textures[this.shapeType];
+    const sprite = new PIXI.Sprite(texture);
+    // change the sprite's size
+    sprite.width = this.width;
+    sprite.height = this.height;
+    // center the sprite's anchor point
+    sprite.anchor.x = 0.5;
+    sprite.anchor.y = 0.5;
+
+    gr.addChild(sprite);
+
+    app.stage.addChild(gr);
   }
 }

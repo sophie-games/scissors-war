@@ -2,9 +2,9 @@ import * as PIXI from "pixi.js";
 
 import Shape, { IShape } from "./entity/shape";
 import Vector2D from "./vector-2d";
-import Circle from "./entity/circle";
-import Triangle from "./entity/triangle";
-import Square from "./entity/square";
+import Circle from "./entity/paper";
+import Triangle from "./entity/scissors";
+import Square from "./entity/rock";
 import Player from "./player";
 import UI from "./ui";
 import Base from "./entity/base";

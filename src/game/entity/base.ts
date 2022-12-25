@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 
 import Shape from "./shape";
-import { ShapeType, SQUARE } from "../shape-types";
 
 export default class Base extends Shape {
   width = 100;
@@ -20,7 +19,7 @@ export default class Base extends Shape {
 
     gr.beginFill(this.color);
     gr.lineStyle(2, 0xfafad2);
-    gr.drawCircle(this.width / 2, this.height / 2, this.width / 2);
+    gr.drawCircle(0, 0, this.width / 2);
     gr.endFill();
 
     gr.position.x = this.position.x;

@@ -1,10 +1,10 @@
 export const UNDEFINED = "undefined";
-export const CIRCLE = "circle";
-export const TRIANGLE = "triangle";
-export const SQUARE = "square";
+export const PAPER = "paper";
+export const ROCK = "rock";
+export const SCISSORS = "scissors";
 
 export type ShapeType =
   | typeof UNDEFINED
-  | typeof CIRCLE
-  | typeof TRIANGLE
-  | typeof SQUARE;
+  | typeof PAPER
+  | typeof ROCK
+  | typeof SCISSORS;

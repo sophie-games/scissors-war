@@ -1,4 +1,4 @@
-import { CIRCLE, ShapeType, SQUARE, TRIANGLE, UNDEFINED } from "./shape-types";
+import { PAPER, ROCK, SCISSORS, ShapeType, UNDEFINED } from "./shape-types";
 
 export const attackBonus = (
   attackerShapeType: ShapeType,
@@ -9,33 +9,33 @@ export const attackBonus = (
   const reducedAttack = attack / 2;
 
   const bonusMap: any = {
-    [CIRCLE]: {
-      [CIRCLE]: attack,
-      [TRIANGLE]: amplifiedAttack,
-      [SQUARE]: reducedAttack,
-      [UNDEFINED]: attack
+    [PAPER]: {
+      [PAPER]: attack,
+      [ROCK]: amplifiedAttack,
+      [SCISSORS]: reducedAttack,
+      [UNDEFINED]: attack,
     },
 
-    [TRIANGLE]: {
-      [CIRCLE]: reducedAttack,
-      [TRIANGLE]: attack,
-      [SQUARE]: amplifiedAttack,
-      [UNDEFINED]: attack
+    [ROCK]: {
+      [PAPER]: reducedAttack,
+      [ROCK]: attack,
+      [SCISSORS]: amplifiedAttack,
+      [UNDEFINED]: attack,
     },
 
-    [SQUARE]: {
-      [CIRCLE]: amplifiedAttack,
-      [TRIANGLE]: reducedAttack,
-      [SQUARE]: attack,
-      [UNDEFINED]: attack
+    [SCISSORS]: {
+      [PAPER]: amplifiedAttack,
+      [ROCK]: reducedAttack,
+      [SCISSORS]: attack,
+      [UNDEFINED]: attack,
     },
 
     [UNDEFINED]: {
-      [CIRCLE]: attack,
-      [TRIANGLE]: attack,
-      [SQUARE]: attack,
-      [UNDEFINED]: attack
-    }
+      [PAPER]: attack,
+      [ROCK]: attack,
+      [SCISSORS]: attack,
+      [UNDEFINED]: attack,
+    },
   };
 
   return bonusMap[attackerShapeType][defenderShapeType];

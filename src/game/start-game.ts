@@ -44,15 +44,6 @@ export function startGame() {
       // W
       cond: () => keyboard.isPressed(87) && game.canPlayerBuy(1),
       shape: () =>
-        game.createCircle({
-          position: new Vector2D(player1Base.x, player1Base.y),
-          team: 1,
-        }),
-    },
-    {
-      // S
-      cond: () => keyboard.isPressed(83) && game.canPlayerBuy(1),
-      shape: () =>
         game.createTriangle({
           position: new Vector2D(player1Base.x, player1Base.y),
           team: 1,
@@ -61,6 +52,15 @@ export function startGame() {
     {
       // A
       cond: () => keyboard.isPressed(65) && game.canPlayerBuy(1),
+      shape: () =>
+        game.createCircle({
+          position: new Vector2D(player1Base.x, player1Base.y),
+          team: 1,
+        }),
+    },
+    {
+      // D
+      cond: () => keyboard.isPressed(68) && game.canPlayerBuy(1),
       shape: () =>
         game.createSquare({
           position: new Vector2D(player1Base.x, player1Base.y),
@@ -72,16 +72,6 @@ export function startGame() {
       // Arrow up
       cond: () => keyboard.isPressed(38) && game.canPlayerBuy(2),
       shape: () =>
-        game.createCircle({
-          position: new Vector2D(player2Base.x, player2Base.y),
-          team: 2,
-        }),
-    },
-
-    {
-      // Arrow down
-      cond: () => keyboard.isPressed(40) && game.canPlayerBuy(2),
-      shape: () =>
         game.createTriangle({
           position: new Vector2D(player2Base.x, player2Base.y),
           team: 2,
@@ -91,6 +81,16 @@ export function startGame() {
     {
       // Arrow left
       cond: () => keyboard.isPressed(37) && game.canPlayerBuy(2),
+      shape: () =>
+        game.createCircle({
+          position: new Vector2D(player2Base.x, player2Base.y),
+          team: 2,
+        }),
+    },
+
+    {
+      // Arrow right
+      cond: () => keyboard.isPressed(39) && game.canPlayerBuy(2),
       shape: () =>
         game.createSquare({
           position: new Vector2D(player2Base.x, player2Base.y),

@@ -1,144 +1,191 @@
 import * as PIXI from "pixi.js";
 
-import { IEntity } from "./entity/entity";
-import Agent, { IAgent } from "./entity/agent";
+import Shape, { IShape } from "./entity/shape";
 import Vector2D from "./vector-2d";
-import Warrior from "./entity/warrior";
-import Mage from "./entity/mage";
+import Circle from "./entity/circle";
+import Triangle from "./entity/triangle";
+import Square from "./entity/square";
+import Player from "./player";
+import UI from "./ui";
+import Base from "./entity/base";
 
 export default class Game {
   app: PIXI.Application;
 
-  private agents: Map<string, Agent> = new Map();
+  private shapes: Map<string, Shape> = new Map();
+  players: Map<number, Player> = new Map();
+  ui: UI;
+  tickTime = Date.now();
 
   constructor(app: PIXI.Application) {
     this.app = app;
+
+    this.players.set(1, new Player());
+    this.players.set(2, new Player());
+
+    this.ui = new UI({ game: this, container: this.app.stage });
   }
 
-  addWarrior(props: IAgent) {
-    const soldier = new Warrior(props);
-    soldier.init(this.app);
-
-    this.agents.set(soldier.uuid, soldier);
+  getPlayer(team: number) {
+    const player = this.players.get(team);
+    if (!player) throw new Error(`There is no player ${team}`);
+    return player;
   }
 
-  addMage(props: IAgent) {
-    const soldier = new Mage(props);
-    soldier.init(this.app);
+  buyShape(shape: Shape) {
+    const player = this.getPlayer(shape.team);
 
-    this.agents.set(soldier.uuid, soldier);
+    if (player.gold - shape.gold < 0) return;
+    player.subtractGold(shape.gold);
+    player.updateLastTimeBought(this.tickTime);
+
+    this.addShape(shape);
   }
 
-  public moveAgentTo(agent: Agent, x: number, y: number, speed?: number) {
-    let speedToUse = speed ? speed : agent.speed;
+  addShape(shape: Shape) {
+    shape.init(this.app);
+    this.shapes.set(shape.uuid, shape);
+  }
 
-    const originalMovement = agent.getMovementTo(x, y, speedToUse);
+  createCircle(props: IShape) {
+    return new Circle(props);
+  }
+  createTriangle(props: IShape) {
+    return new Triangle(props);
+  }
+  createSquare(props: IShape) {
+    return new Square(props);
+  }
+  createBase(props: IShape) {
+    return new Base(props);
+  }
+
+  public moveShapeTo(shape: Shape, x: number, y: number, speed?: number) {
+    let speedToUse = speed ? speed : shape.speed;
+
+    const originalMovement = shape.getMovementTo(x, y, speedToUse);
     const movement = originalMovement.clone();
 
     if (movement.isZero()) {
       return;
     }
 
-    for (let otherAgent of this.agents.values()) {
-      if (agent === otherAgent) {
+    for (let otherShape of this.shapes.values()) {
+      if (shape === otherShape) {
         continue;
       }
 
       // The player will not collide with his allies
       if (
-        agent.team === otherAgent.team &&
-        agent.timeCreated < otherAgent.timeCreated
+        shape.team === otherShape.team &&
+        (otherShape.shapeIgnoredByAllies ||
+          shape.timeCreated < otherShape.timeCreated)
       ) {
         continue;
       }
 
-      const isXColliding = agent.isCollidingWith(
-        otherAgent,
-        agent.position.x + movement.x,
-        agent.position.y
+      const isXColliding = shape.isCollidingWith(
+        otherShape,
+        shape.position.x + movement.x,
+        shape.position.y
       );
-      const isYColliding = agent.isCollidingWith(
-        otherAgent,
-        agent.position.x,
-        agent.position.y + movement.y
+      const isYColliding = shape.isCollidingWith(
+        otherShape,
+        shape.position.x,
+        shape.position.y + movement.y
       );
 
       if (isXColliding) {
-        const distanceToAgent1 = agent.getDistance(
-          otherAgent.position.x,
-          otherAgent.position.y
+        const distanceToShape1 = shape.getDistance(
+          otherShape.position.x,
+          otherShape.position.y
         );
-        const distanceToAgent2 = agent.getDistance(
-          otherAgent.position.x,
-          otherAgent.position.y,
+        const distanceToShape2 = shape.getDistance(
+          otherShape.position.x,
+          otherShape.position.y,
           movement.x,
           0
         );
 
-        if (distanceToAgent1 < distanceToAgent2) {
+        if (distanceToShape1 < distanceToShape2) {
           movement.setX(0);
         }
       }
       if (isYColliding) {
-        const distanceToAgent1 = agent.getDistance(
-          otherAgent.position.x,
-          otherAgent.position.y
+        const distanceToShape1 = shape.getDistance(
+          otherShape.position.x,
+          otherShape.position.y
         );
-        const distanceToAgent2 = agent.getDistance(
-          otherAgent.position.x,
-          otherAgent.position.y,
+        const distanceToShape2 = shape.getDistance(
+          otherShape.position.x,
+          otherShape.position.y,
           0,
           movement.y
         );
 
-        if (distanceToAgent1 < distanceToAgent2) {
+        if (distanceToShape1 < distanceToShape2) {
           movement.setY(0);
         }
       }
       if (movement.isZero()) {
-        agent.move(originalMovement.getOrthogonal(agent.timeCreated % 2 === 0));
+        shape.move(originalMovement.getOrthogonal(shape.timeCreated % 2 === 0));
         return;
       }
     }
 
-    agent.move(movement);
+    shape.move(movement);
   }
 
   public getTheCloserEnemyOf(position: Vector2D, team: number) {
     let distance = Number.POSITIVE_INFINITY;
-    let closerEnemy: Agent | null = null;
+    let closerEnemy: Shape | null = null;
 
-    this.agents.forEach((a) => {
+    this.shapes.forEach((a) => {
       if (a.team === team || a.isDead) {
         return;
       }
 
-      const distanceToAgent = position.getDistance(a.position);
+      const distanceToShape = position.getDistance(a.position);
 
-      if (distanceToAgent < distance) {
+      if (distanceToShape < distance) {
         closerEnemy = a;
-        distance = distanceToAgent;
+        distance = distanceToShape;
       }
     });
 
     return closerEnemy!;
   }
 
-  public getTheCloserEnemyOfAgent(agent: Agent) {
-    return this.getTheCloserEnemyOf(agent.position, agent.team);
+  public getTheCloserEnemyOfShape(shape: Shape) {
+    return this.getTheCloserEnemyOf(shape.position, shape.team);
+  }
+
+  canPlayerBuy(team: number) {
+    const player = this.getPlayer(team);
+    return player.checkIfCanBuy(this.tickTime);
+  }
+
+  getEnemyPlayer(team: number) {
+    return this.getPlayer(team === 1 ? 2 : 1);
   }
 
   tick() {
-    this.agents.forEach((a) => {
+    this.tickTime = Date.now();
+
+    this.shapes.forEach((a) => {
       a.think(this);
     });
 
-    // Removes dead agents
-    this.agents.forEach((a) => {
+    // Removes dead shapes
+    this.shapes.forEach((a) => {
       if (a.isDead) {
-        this.agents.delete(a.uuid);
+        this.shapes.delete(a.uuid);
         a.die();
+        this.getEnemyPlayer(a.team).earnGold(a.gold / 2);
       }
     });
+
+    this.players.forEach((p) => p.checkToEarnGold(this.tickTime));
+    this.ui.update(this);
   }
 }

@@ -3,26 +3,33 @@ import Game from "../game";
 import Vector2D from "../vector-2d";
 
 import Entity, { IEntity } from "./entity";
+import { ShapeType, UNDEFINED } from "../shape-types";
+import { attackBonus } from "../attack-bonus";
 
 const HP_BAR_WIDTH = 56;
 const HP_BAR_HEIGHT = 10;
 
-export interface IAgent extends IEntity {
+export interface IShape extends IEntity {
   team: 1 | 2;
 }
 
-export default class Agent extends Entity {
+export default class Shape extends Entity {
   team: 1 | 2;
 
-  maxHp = 100;
+  maxHp = 200;
   hp: number;
   attack = 1;
   speed = 1;
+  gold = 50;
+
+  shapeIgnoredByAllies = false;
+
+  shapeType: ShapeType = UNDEFINED;
 
   protected gr = new PIXI.Graphics();
   private hpBar?: PIXI.Graphics;
 
-  constructor(props: IAgent) {
+  constructor(props: IShape) {
     super(props);
 
     this.team = props.team;
@@ -51,6 +58,8 @@ export default class Agent extends Entity {
     maxHp.beginFill(0x4a0707);
     maxHp.drawRect(0, 0, HP_BAR_WIDTH, HP_BAR_HEIGHT);
     maxHp.endFill();
+
+    maxHp.position.x = this.width / 2 - HP_BAR_WIDTH / 2;
     maxHp.position.y = -HP_BAR_HEIGHT - 10;
 
     const hp = new PIXI.Graphics();
@@ -84,7 +93,24 @@ export default class Agent extends Entity {
   }
 
   public think(game: Game) {
-    throw new Error("Must be declared in subclass");
+    const closerEnemy = game.getTheCloserEnemyOfShape(this);
+
+    if (!closerEnemy) return;
+
+    game.moveShapeTo(this, closerEnemy.position.x, closerEnemy.position.y);
+
+    const distance = this.position.getDistance(closerEnemy.position);
+
+    if (distance > this.width + 10 && distance > closerEnemy.width + 10) return;
+
+    const attackWithBonus = attackBonus(
+      this.shapeType,
+      closerEnemy.shapeType,
+      this.attack
+    );
+
+    closerEnemy.hurt(attackWithBonus);
+    closerEnemy.updateHpBar();
   }
 
   move(vector: Vector2D) {

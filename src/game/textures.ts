@@ -6,9 +6,9 @@ interface ITextures {
 }
 
 const textures: ITextures = {
-  [ROCK]: PIXI.Texture.from("/medieval-war/rock.png"),
-  [SCISSORS]: PIXI.Texture.from("/medieval-war/scissors.png"),
-  [PAPER]: PIXI.Texture.from("/medieval-war/paper.png"),
+  [ROCK]: PIXI.Texture.from("/scissors-war/rock.png"),
+  [SCISSORS]: PIXI.Texture.from("/scissors-war/scissors.png"),
+  [PAPER]: PIXI.Texture.from("/scissors-war/paper.png"),
 };
 
 export default textures;

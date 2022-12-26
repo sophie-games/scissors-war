@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="App">
-      <h2>Medieval War</h2>
+      <h2>Scissors War</h2>
 
       <div className="Game" />
     </div>

@@ -3,6 +3,7 @@ import Soldier from "./entity/shape";
 import Game from "./game";
 import { GameMode, TWO_PLAYERS } from "./game-modes";
 import Keyboard from "./keyboard";
+import { BASE, PAPER, ROCK, SCISSORS } from "./shape-types";
 import Vector2D from "./vector-2d";
 
 const SCREEN_WIDTH = 1280;
@@ -29,14 +30,8 @@ export function startGame(mode: GameMode) {
   const keyboard = new Keyboard();
 
   // Creates the player bases
-  const base1 = game.createBase({
-    position: player1BasePosition.clone(),
-    team: 1,
-  });
-  const base2 = game.createBase({
-    position: player2BasePosition.clone(),
-    team: 2,
-  });
+  const base1 = game.createShape(BASE, 1);
+  const base2 = game.createShape(BASE, 2);
   game.addShape(base1);
   game.addShape(base2);
 
@@ -44,29 +39,17 @@ export function startGame(mode: GameMode) {
     {
       // W
       cond: () => keyboard.isPressed(87) && game.canPlayerBuy(1),
-      shape: () =>
-        game.createScissors({
-          position: player1BasePosition.clone(),
-          team: 1,
-        }),
+      shape: () => game.createShape(SCISSORS, 1),
     },
     {
       // A
       cond: () => keyboard.isPressed(65) && game.canPlayerBuy(1),
-      shape: () =>
-        game.createPaper({
-          position: player1BasePosition.clone(),
-          team: 1,
-        }),
+      shape: () => game.createShape(PAPER, 1),
     },
     {
       // D
       cond: () => keyboard.isPressed(68) && game.canPlayerBuy(1),
-      shape: () =>
-        game.createRock({
-          position: player1BasePosition.clone(),
-          team: 1,
-        }),
+      shape: () => game.createShape(ROCK, 1),
     },
   ];
 
@@ -76,31 +59,19 @@ export function startGame(mode: GameMode) {
       {
         // Arrow up
         cond: () => keyboard.isPressed(38) && game.canPlayerBuy(2),
-        shape: () =>
-          game.createScissors({
-            position: player2BasePosition.clone(),
-            team: 2,
-          }),
+        shape: () => game.createShape(SCISSORS, 2),
       },
 
       {
         // Arrow left
         cond: () => keyboard.isPressed(37) && game.canPlayerBuy(2),
-        shape: () =>
-          game.createPaper({
-            position: player2BasePosition.clone(),
-            team: 2,
-          }),
+        shape: () => game.createShape(PAPER, 2),
       },
 
       {
         // Arrow right
         cond: () => keyboard.isPressed(39) && game.canPlayerBuy(2),
-        shape: () =>
-          game.createRock({
-            position: player2BasePosition.clone(),
-            team: 2,
-          }),
+        shape: () => game.createShape(ROCK, 2),
       }
     );
   }

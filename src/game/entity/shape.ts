@@ -3,7 +3,7 @@ import Game from "../game";
 import Vector2D from "../vector-2d";
 
 import Entity, { IEntity } from "./entity";
-import { ShapeType, UNDEFINED } from "../shape-types";
+import { ROCK, ShapeType } from "../shape-types";
 import { attackBonus } from "../attack-bonus";
 import textures from "../textures";
 
@@ -25,7 +25,7 @@ export default class Shape extends Entity {
 
   shapeIgnoredByAllies = false;
 
-  shapeType: ShapeType = UNDEFINED;
+  shapeType: ShapeType = ROCK;
 
   protected gr = new PIXI.Graphics();
   private hpBar?: PIXI.Graphics;

@@ -1,4 +1,4 @@
-import { PAPER, ROCK, SCISSORS, ShapeType, UNDEFINED } from "./shape-types";
+import { BASE, PAPER, ROCK, SCISSORS, ShapeType } from "./shape-types";
 
 export const attackBonus = (
   attackerShapeType: ShapeType,
@@ -13,28 +13,28 @@ export const attackBonus = (
       [PAPER]: attack,
       [ROCK]: amplifiedAttack,
       [SCISSORS]: reducedAttack,
-      [UNDEFINED]: attack,
+      [BASE]: attack,
     },
 
     [ROCK]: {
       [PAPER]: reducedAttack,
       [ROCK]: attack,
       [SCISSORS]: amplifiedAttack,
-      [UNDEFINED]: attack,
+      [BASE]: attack,
     },
 
     [SCISSORS]: {
       [PAPER]: amplifiedAttack,
       [ROCK]: reducedAttack,
       [SCISSORS]: attack,
-      [UNDEFINED]: attack,
+      [BASE]: attack,
     },
 
-    [UNDEFINED]: {
+    [BASE]: {
       [PAPER]: attack,
       [ROCK]: attack,
       [SCISSORS]: attack,
-      [UNDEFINED]: attack,
+      [BASE]: attack,
     },
   };
 

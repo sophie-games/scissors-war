@@ -1,5 +1,4 @@
 import * as PIXI from "pixi.js";
-import Soldier from "./entity/shape";
 import Game from "./game";
 import { GameMode, TWO_PLAYERS } from "./game-modes";
 import Keyboard from "./keyboard";
@@ -9,7 +8,7 @@ import Vector2D from "./vector-2d";
 const SCREEN_WIDTH = 1280;
 const SCREEN_HEIGHT = 720;
 
-export function startGame(mode: GameMode) {
+export function startGame(mode: GameMode, onFinish: () => any) {
   // ---------------------------------------------------------- //
 
   const app = new PIXI.Application({
@@ -34,6 +33,17 @@ export function startGame(mode: GameMode) {
   const base2 = game.createShape(BASE, 2);
   game.addShape(base1);
   game.addShape(base2);
+
+  base1.onDie(() => {
+    alert("Player 2 wins!");
+    app.destroy();
+    onFinish();
+  });
+  base2.onDie(() => {
+    alert("Player 1 wins!");
+    app.destroy();
+    onFinish();
+  });
 
   const keysCallback = [
     {

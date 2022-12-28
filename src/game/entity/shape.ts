@@ -24,8 +24,8 @@ export default class Shape extends Entity {
   gold = 50;
 
   shapeIgnoredByAllies = false;
-
   shapeType: ShapeType = ROCK;
+  private _dieEvents: (() => any)[] = [];
 
   protected gr = new PIXI.Graphics();
   private hpBar?: PIXI.Graphics;
@@ -123,6 +123,11 @@ export default class Shape extends Entity {
 
   die() {
     this.gr.destroy();
+    this._dieEvents.forEach((event) => event());
+  }
+
+  onDie(callback: () => any) {
+    this._dieEvents.push(callback);
   }
 
   protected createGraphic(app: PIXI.Application) {

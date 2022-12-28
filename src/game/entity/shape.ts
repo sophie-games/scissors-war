@@ -20,7 +20,7 @@ export default class Shape extends Entity {
   maxHp = 200;
   hp: number;
   attack = 1;
-  speed = 1;
+  speed = 1.5;
   gold = 50;
 
   shapeIgnoredByAllies = false;

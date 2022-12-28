@@ -8,6 +8,13 @@ import Square from "./entity/rock";
 import Player from "./player";
 import UI from "./ui";
 import Base from "./entity/base";
+import { GameMode, SINGLE_PLAYER, TWO_PLAYERS } from "./game-modes";
+import Ai from "./player/ai";
+
+const secondPlayerClassMap = {
+  [SINGLE_PLAYER]: Ai,
+  [TWO_PLAYERS]: Player,
+};
 
 export default class Game {
   app: PIXI.Application;
@@ -17,11 +24,16 @@ export default class Game {
   ui: UI;
   tickTime = Date.now();
 
-  constructor(app: PIXI.Application) {
+  constructor(
+    app: PIXI.Application,
+    mode: GameMode,
+    player1BasePosition: Vector2D,
+    player2BasePosition: Vector2D
+  ) {
     this.app = app;
 
-    this.players.set(1, new Player());
-    this.players.set(2, new Player());
+    this.players.set(1, new Player(1, player1BasePosition));
+    this.players.set(2, new secondPlayerClassMap[mode](2, player2BasePosition));
 
     this.ui = new UI({ game: this, container: this.app.stage });
   }
@@ -185,7 +197,10 @@ export default class Game {
       }
     });
 
-    this.players.forEach((p) => p.checkToEarnGold(this.tickTime));
+    this.players.forEach((p) => {
+      p.think(this);
+      p.checkToEarnGold(this.tickTime);
+    });
     this.ui.update(this);
   }
 }

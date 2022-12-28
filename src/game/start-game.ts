@@ -45,7 +45,7 @@ export function startGame(mode: GameMode) {
       // W
       cond: () => keyboard.isPressed(87) && game.canPlayerBuy(1),
       shape: () =>
-        game.createTriangle({
+        game.createScissors({
           position: player1BasePosition.clone(),
           team: 1,
         }),
@@ -54,7 +54,7 @@ export function startGame(mode: GameMode) {
       // A
       cond: () => keyboard.isPressed(65) && game.canPlayerBuy(1),
       shape: () =>
-        game.createCircle({
+        game.createPaper({
           position: player1BasePosition.clone(),
           team: 1,
         }),
@@ -63,7 +63,7 @@ export function startGame(mode: GameMode) {
       // D
       cond: () => keyboard.isPressed(68) && game.canPlayerBuy(1),
       shape: () =>
-        game.createSquare({
+        game.createRock({
           position: player1BasePosition.clone(),
           team: 1,
         }),
@@ -77,7 +77,7 @@ export function startGame(mode: GameMode) {
         // Arrow up
         cond: () => keyboard.isPressed(38) && game.canPlayerBuy(2),
         shape: () =>
-          game.createTriangle({
+          game.createScissors({
             position: player2BasePosition.clone(),
             team: 2,
           }),
@@ -87,7 +87,7 @@ export function startGame(mode: GameMode) {
         // Arrow left
         cond: () => keyboard.isPressed(37) && game.canPlayerBuy(2),
         shape: () =>
-          game.createCircle({
+          game.createPaper({
             position: player2BasePosition.clone(),
             team: 2,
           }),
@@ -97,7 +97,7 @@ export function startGame(mode: GameMode) {
         // Arrow right
         cond: () => keyboard.isPressed(39) && game.canPlayerBuy(2),
         shape: () =>
-          game.createSquare({
+          game.createRock({
             position: player2BasePosition.clone(),
             team: 2,
           }),

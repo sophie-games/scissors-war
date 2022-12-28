@@ -2,9 +2,9 @@ import * as PIXI from "pixi.js";
 
 import Shape, { IShape } from "./entity/shape";
 import Vector2D from "./vector-2d";
-import Circle from "./entity/paper";
-import Triangle from "./entity/scissors";
-import Square from "./entity/rock";
+import Paper from "./entity/paper";
+import Scissors from "./entity/scissors";
+import Rock from "./entity/rock";
 import Player from "./player";
 import UI from "./ui";
 import Base from "./entity/base";
@@ -59,14 +59,14 @@ export default class Game {
     this.shapes.set(shape.uuid, shape);
   }
 
-  createCircle(props: IShape) {
-    return new Circle(props);
+  createPaper(props: IShape) {
+    return new Paper(props);
   }
-  createTriangle(props: IShape) {
-    return new Triangle(props);
+  createScissors(props: IShape) {
+    return new Scissors(props);
   }
-  createSquare(props: IShape) {
-    return new Square(props);
+  createRock(props: IShape) {
+    return new Rock(props);
   }
   createBase(props: IShape) {
     return new Base(props);

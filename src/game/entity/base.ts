@@ -1,8 +1,11 @@
 import * as PIXI from "pixi.js";
+import { BASE, ShapeType } from "../shape-types";
 
 import Shape from "./shape";
 
 export default class Base extends Shape {
+  shapeType: ShapeType = BASE;
+
   width = 100;
   height = 100;
 

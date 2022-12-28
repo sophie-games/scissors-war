@@ -1,27 +1,41 @@
 import * as PIXI from "pixi.js";
 
-import Shape, { IShape } from "./entity/shape";
+import Shape from "./entity/shape";
 import Vector2D from "./vector-2d";
-import Circle from "./entity/paper";
-import Triangle from "./entity/scissors";
-import Square from "./entity/rock";
+import Paper from "./entity/paper";
+import Scissors from "./entity/scissors";
+import Rock from "./entity/rock";
 import Player from "./player";
 import UI from "./ui";
 import Base from "./entity/base";
+import { GameMode, SINGLE_PLAYER, TWO_PLAYERS } from "./game-modes";
+import Ai from "./player/ai";
+import { ShapeType } from "./shape-types";
+import { shapeKey, shapeMap } from "./entity/shape-map";
+
+const secondPlayerClassMap = {
+  [SINGLE_PLAYER]: Ai,
+  [TWO_PLAYERS]: Player,
+};
 
 export default class Game {
   app: PIXI.Application;
 
-  private shapes: Map<string, Shape> = new Map();
+  shapes: Map<string, Shape> = new Map();
   players: Map<number, Player> = new Map();
   ui: UI;
   tickTime = Date.now();
 
-  constructor(app: PIXI.Application) {
+  constructor(
+    app: PIXI.Application,
+    mode: GameMode,
+    player1BasePosition: Vector2D,
+    player2BasePosition: Vector2D
+  ) {
     this.app = app;
 
-    this.players.set(1, new Player());
-    this.players.set(2, new Player());
+    this.players.set(1, new Player(1, player1BasePosition));
+    this.players.set(2, new secondPlayerClassMap[mode](2, player2BasePosition));
 
     this.ui = new UI({ game: this, container: this.app.stage });
   }
@@ -47,17 +61,14 @@ export default class Game {
     this.shapes.set(shape.uuid, shape);
   }
 
-  createCircle(props: IShape) {
-    return new Circle(props);
-  }
-  createTriangle(props: IShape) {
-    return new Triangle(props);
-  }
-  createSquare(props: IShape) {
-    return new Square(props);
-  }
-  createBase(props: IShape) {
-    return new Base(props);
+  createShape(shapeType: shapeKey, team: 1 | 2) {
+    const ShapeClass = shapeMap[shapeType];
+
+    const position = this.players.get(team)?.startPosition.clone();
+
+    if (!position) throw new Error("Position is undefined");
+
+    return new ShapeClass({ team, position });
   }
 
   public moveShapeTo(shape: Shape, x: number, y: number, speed?: number) {
@@ -185,7 +196,10 @@ export default class Game {
       }
     });
 
-    this.players.forEach((p) => p.checkToEarnGold(this.tickTime));
+    this.players.forEach((p) => {
+      p.think(this);
+      p.checkToEarnGold(this.tickTime);
+    });
     this.ui.update(this);
   }
 }

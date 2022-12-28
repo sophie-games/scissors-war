@@ -3,7 +3,7 @@ import Game from "../game";
 import Vector2D from "../vector-2d";
 
 import Entity, { IEntity } from "./entity";
-import { ShapeType, UNDEFINED } from "../shape-types";
+import { ROCK, ShapeType } from "../shape-types";
 import { attackBonus } from "../attack-bonus";
 import textures from "../textures";
 
@@ -20,12 +20,12 @@ export default class Shape extends Entity {
   maxHp = 200;
   hp: number;
   attack = 1;
-  speed = 1;
+  speed = 1.5;
   gold = 50;
 
   shapeIgnoredByAllies = false;
-
-  shapeType: ShapeType = UNDEFINED;
+  shapeType: ShapeType = ROCK;
+  private _dieEvents: (() => any)[] = [];
 
   protected gr = new PIXI.Graphics();
   private hpBar?: PIXI.Graphics;
@@ -123,6 +123,11 @@ export default class Shape extends Entity {
 
   die() {
     this.gr.destroy();
+    this._dieEvents.forEach((event) => event());
+  }
+
+  onDie(callback: () => any) {
+    this._dieEvents.push(callback);
   }
 
   protected createGraphic(app: PIXI.Application) {

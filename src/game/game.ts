@@ -1,16 +1,8 @@
-import * as PIXI from "pixi.js";
-
 import Shape from "./entity/shape";
 import Vector2D from "./vector-2d";
-import Paper from "./entity/paper";
-import Scissors from "./entity/scissors";
-import Rock from "./entity/rock";
 import Player from "./player";
-import UI from "./ui";
-import Base from "./entity/base";
 import { GameMode, SINGLE_PLAYER, TWO_PLAYERS } from "./game-modes";
 import Ai from "./player/ai";
-import { ShapeType } from "./shape-types";
 import { shapeKey, shapeMap } from "./entity/shape-map";
 
 const secondPlayerClassMap = {
@@ -19,25 +11,24 @@ const secondPlayerClassMap = {
 };
 
 export default class Game {
-  app: PIXI.Application;
 
   shapes: Map<string, Shape> = new Map();
-  players: Map<number, Player> = new Map();
-  ui: UI;
+  players: Map<number, Player | Ai> = new Map();
   tickTime = Date.now();
 
-  constructor(
-    app: PIXI.Application,
-    mode: GameMode,
-    player1BasePosition: Vector2D,
-    player2BasePosition: Vector2D
-  ) {
-    this.app = app;
+  private _shapeAddedEvents: ((shape: Shape) => any)[] = [];
 
+  constructor(
+    mode: GameMode,
+    player1BasePosition: Vector2D = new Vector2D(200, 200),
+    player2BasePosition: Vector2D = new Vector2D(1080, 520)
+  ) {
     this.players.set(1, new Player(1, player1BasePosition));
     this.players.set(2, new secondPlayerClassMap[mode](2, player2BasePosition));
+  }
 
-    this.ui = new UI({ game: this, container: this.app.stage });
+  onShapeAdded(callback: (shape: Shape) => any) {
+    this._shapeAddedEvents.push(callback);
   }
 
   getPlayer(team: number) {
@@ -57,8 +48,8 @@ export default class Game {
   }
 
   addShape(shape: Shape) {
-    shape.init(this.app);
     this.shapes.set(shape.uuid, shape);
+    this._shapeAddedEvents.forEach((event) => event(shape));
   }
 
   createShape(shapeType: shapeKey, team: 1 | 2) {
@@ -200,6 +191,5 @@ export default class Game {
       p.think(this);
       p.checkToEarnGold(this.tickTime);
     });
-    this.ui.update(this);
   }
 }

@@ -23,6 +23,10 @@ export default class Entity {
     this.uuid = props.uuid || createUUID();
   }
 
+  public addEntity(entity: Entity) {
+    this.entities.push(entity);
+  }
+
   public move(vector: Vector2D) {
     this.position.sum(vector);
     this.entities.forEach((e) => e.move(vector));
@@ -60,6 +64,14 @@ export default class Entity {
       e.position.y + hh >= posY - ehh && e.position.y - hh <= posY + ehh;
 
     return isXColliding && isYColliding;
+  }
+
+  public hurt(damage: number) {
+    this.entities.forEach((e) => e.hurt(damage));
+  }
+
+  public die() {
+    this.entities.forEach((e) => e.die());
   }
 }
 

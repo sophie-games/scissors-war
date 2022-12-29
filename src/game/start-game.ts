@@ -1,8 +1,11 @@
 import * as PIXI from "pixi.js";
+import { graphicMap } from "./entity/graphics/graphic-map";
+import GrSprite from "./entity/graphics/sprite";
 import Game from "./game";
 import { GameMode, TWO_PLAYERS } from "./game-modes";
 import Keyboard from "./keyboard";
 import { BASE, PAPER, ROCK, SCISSORS } from "./shape-types";
+import UI from "./ui";
 import Vector2D from "./vector-2d";
 
 const SCREEN_WIDTH = 1280;
@@ -24,7 +27,19 @@ export function startGame(mode: GameMode, onFinish: () => any) {
   const player1BasePosition = new Vector2D(200, 200);
   const player2BasePosition = new Vector2D(1080, 520);
 
-  const game = new Game(app, mode, player1BasePosition, player2BasePosition);
+  const game = new Game(mode, player1BasePosition, player2BasePosition);
+  const ui = new UI({ game: game, container: app.stage });
+
+  game.onShapeAdded((shape) => {
+    const GrClass = graphicMap[shape.shapeType];
+
+    const gr = new GrClass({
+      team: shape.team,
+      position: shape.position.clone(),
+    });
+    gr.init(app, shape);
+    shape.addEntity(gr);
+  });
 
   const keyboard = new Keyboard();
 
@@ -90,6 +105,7 @@ export function startGame(mode: GameMode, onFinish: () => any) {
   // in the amount of time that has passed since the last tick
   app.ticker.add(() => {
     game.tick();
+    ui.update(game);
 
     keysCallback.forEach((keyData) => {
       if (!keyData.cond()) return;

@@ -43,4 +43,8 @@ export default class Player {
   think(game: Game) {
     // Does nothing
   }
+
+  getShapeToBuy(game: Game) {
+    throw new Error("Must be defined in subclass");
+  }
 }

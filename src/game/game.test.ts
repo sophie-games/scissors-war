@@ -1,5 +1,6 @@
 import Game from "./game";
 import { SINGLE_PLAYER } from "./game-modes";
+import Ai from "./player/ai";
 import { PAPER, ROCK, SCISSORS, ShapeType } from "./shape-types";
 
 describe("Game", () => {
@@ -15,16 +16,20 @@ describe("Game", () => {
         { input: SCISSORS, output: ROCK },
       ];
 
+      let game: Game, ai: Ai;
+      beforeEach(() => {
+        game = new Game(SINGLE_PLAYER);
+
+        const playerAi = game.players.get(2);
+        if (!playerAi) throw new Error("Ai is undefined");
+
+        ai = playerAi;
+      });
+
       tests.forEach((eachTest) => {
         test(`should return ${eachTest.output} if the enemy has ${eachTest.input}.`, () => {
-          const game = new Game(SINGLE_PLAYER);
-
-          const ai = game.players.get(2);
-
-          if (!ai) throw new Error("Ai is undefined");
-
-          const paper = game.createShape(eachTest.input, 1);
-          game.addShape(paper);
+          const shape = game.createShape(eachTest.input, 1);
+          game.addShape(shape);
 
           expect(ai.getShapeToBuy(game)).toBe(eachTest.output);
         });

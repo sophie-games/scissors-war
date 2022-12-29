@@ -14,6 +14,17 @@ export default function HomeView() {
           Two players
         </Link>
       </h2>
+
+      <h3>Controls player 1:</h3>
+      <p>A: Paper</p>
+      <p>W: Scissors</p>
+      <p>D: Rock</p>
+
+      <h3>Controls player 2:</h3>
+      <p>Arrow left: Paper</p>
+      <p>Arrow up: Scissors</p>
+      <p>Arrow right: Rock</p>
+
     </div>
   );
 }

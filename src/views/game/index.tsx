@@ -2,7 +2,7 @@ import isTouchDevice from "is-touch-device";
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
 import Game from "../../game/game";
-import { GameMode } from "../../game/game-modes";
+import { GameMode, TWO_PLAYERS } from "../../game/game-modes";
 import { PAPER, ROCK, SCISSORS, ShapeType } from "../../game/shape-types";
 import { startGame } from "../../game/start-game";
 
@@ -11,10 +11,10 @@ const isTouch = isTouchDevice();
 export default function GameView() {
   const gameRef = useRef<Game | null>(null);
   const { search } = useLocation();
+  const mode = new URLSearchParams(search).get("mode");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const mode = new URLSearchParams(search).get("mode");
     const onFinish = () => {
       navigate("/");
     };
@@ -51,7 +51,7 @@ export default function GameView() {
 
       <div className="Game" />
 
-      {isTouch && (
+      {mode === TWO_PLAYERS && isTouch && (
         <div>
           <button onClick={() => handleClick(PAPER, 2)}>←</button>
           <button onClick={() => handleClick(SCISSORS, 2)}>↑</button>

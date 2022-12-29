@@ -1,13 +1,13 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
+import CreatedBy from "./components/created-by";
 
 // Views
 import GameView from "./views/game";
 import HomeView from "./views/home";
 
 function App() {
-
   return (
     <div className="App">
       <h1>Scissors War</h1>
@@ -19,7 +19,7 @@ function App() {
         </Routes>
       </Router>
 
-      <div className="Game" />
+      <CreatedBy />
     </div>
   );
 }

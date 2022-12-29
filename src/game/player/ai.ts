@@ -6,11 +6,13 @@ import { getRandomFromArray } from "../utils";
 export default class Ai extends Player {
   think(game: Game) {
     const shape = game.createShape(this.getShapeToBuy(game), this.team);
+
+    if (!shape) return;
+
     game.buyShape(shape);
   }
 
   getShapeToBuy(game: Game) {
-
     const enemyShapesMap: any = {};
     game.shapes.forEach((shape) => {
       if (shape.team === this.team) return;
@@ -30,7 +32,7 @@ export default class Ai extends Player {
       [ROCK]: PAPER,
       [PAPER]: SCISSORS,
       [SCISSORS]: ROCK,
-      [BASE]: getRandomFromArray([PAPER, ROCK, SCISSORS])
+      [BASE]: getRandomFromArray([PAPER, ROCK, SCISSORS]),
     };
 
     return obj[mostShapeUsedByEnemy];

@@ -39,3 +39,46 @@
 .read-the-docs {
   color: #888;
 }
+
+p {
+  margin: 0;
+}
+
+h3 {
+  margin: 10px 0;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.instructions {
+  text-align: left;
+  max-width: 640px;
+}
+.instructions > p{
+  margin: 10px 0;
+}
+
+.control-player-container {
+  display: flex;
+  align-items: center;
+}
+
+.control-container {
+  display: flex;
+  justify-content: center;
+}
+
+.control {
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+}
+
+.Game canvas {
+  width: 100%;
+  height: 100%;
+}

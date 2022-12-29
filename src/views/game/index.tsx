@@ -13,7 +13,11 @@ export default function GameView() {
       navigate("/");
     };
 
-    startGame(mode as GameMode, onFinish);
+    const finishCallback = startGame(mode as GameMode, onFinish);
+
+    return () => {
+      finishCallback();
+    }
   }, []);
 
   return <div className="Game" />;

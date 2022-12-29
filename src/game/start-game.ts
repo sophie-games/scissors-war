@@ -114,4 +114,9 @@ export function startGame(mode: GameMode, onFinish: () => any) {
       game.buyShape(shape);
     });
   });
+
+  return () => {
+    // This is only in case the user has gone to another tab without finishing the game.
+    if (app.stage) app.destroy();
+  };
 }

@@ -1,6 +1,6 @@
 import Game from "../game";
 import Player from ".";
-import { PAPER, ROCK, SCISSORS } from "../shape-types";
+import { BASE, PAPER, ROCK, SCISSORS } from "../shape-types";
 import { getRandomFromArray } from "../utils";
 
 export default class Ai extends Player {
@@ -10,9 +10,6 @@ export default class Ai extends Player {
   }
 
   getShapeToBuy(game: Game) {
-    const shapesToSelect = [PAPER, ROCK, SCISSORS];
-
-    const randomShape = getRandomFromArray(shapesToSelect);
 
     const enemyShapesMap: any = {};
     game.shapes.forEach((shape) => {
@@ -25,6 +22,17 @@ export default class Ai extends Player {
       }
     });
 
-    return randomShape;
+    const mostShapeUsedByEnemy = Object.keys(enemyShapesMap).reduce((a, b) =>
+      enemyShapesMap[a] > enemyShapesMap[b] ? a : b
+    );
+
+    const obj: any = {
+      [ROCK]: PAPER,
+      [PAPER]: SCISSORS,
+      [SCISSORS]: ROCK,
+      [BASE]: getRandomFromArray([PAPER, ROCK, SCISSORS])
+    };
+
+    return obj[mostShapeUsedByEnemy];
   }
 }

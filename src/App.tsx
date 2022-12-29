@@ -10,7 +10,7 @@ import HomeView from "./views/home";
 function App() {
   return (
     <div className="App">
-      <h1>Scissors War</h1>
+      <h2>Scissors War</h2>
 
       <Router>
         <Routes>
@@ -19,7 +19,9 @@ function App() {
         </Routes>
       </Router>
 
-      <CreatedBy />
+      <footer>
+        <CreatedBy />
+      </footer>
     </div>
   );
 }

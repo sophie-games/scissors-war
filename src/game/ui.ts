@@ -4,19 +4,23 @@ import Game from "./game";
 interface IUI {
   container: PIXI.Container;
   game: Game;
+  width: number;
+  height: number;
 }
 
 export default class UI {
   gold1: PIXI.Text;
   gold2: PIXI.Text;
 
-  constructor({ container, game }: IUI) {
+  constructor({ container, game, width, height }: IUI) {
+    const margin = 80;
+
     this.gold1 = new PIXI.Text(game.getPlayer(1).gold, {
       fill: "#ffffff",
       fontSize: 32,
       fontWeight: "bold",
     });
-    this.gold1.position.x = 80 / 2;
+    this.gold1.position.x = margin / 2;
 
     this.gold2 = new PIXI.Text(game.getPlayer(2).gold, {
       fill: "#ffffff",
@@ -24,7 +28,7 @@ export default class UI {
       fontWeight: "bold",
       align: "right",
     });
-    this.gold2.position.x = 1200;
+    this.gold2.position.x = width - margin;
 
     container.addChild(this.gold1);
     container.addChild(this.gold2);

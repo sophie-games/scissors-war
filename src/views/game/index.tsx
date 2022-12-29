@@ -44,8 +44,8 @@ export default function GameView() {
       {isTouch && (
         <div>
           <button onClick={() => handleClick(PAPER, 1)}>A</button>
-          <button onClick={() => handleClick(ROCK, 1)}>W</button>
-          <button onClick={() => handleClick(SCISSORS, 1)}>D</button>
+          <button onClick={() => handleClick(SCISSORS, 1)}>W</button>
+          <button onClick={() => handleClick(ROCK, 1)}>D</button>
         </div>
       )}
 
@@ -54,8 +54,8 @@ export default function GameView() {
       {isTouch && (
         <div>
           <button onClick={() => handleClick(PAPER, 2)}>←</button>
-          <button onClick={() => handleClick(ROCK, 2)}>↑</button>
-          <button onClick={() => handleClick(SCISSORS, 2)}>→</button>
+          <button onClick={() => handleClick(SCISSORS, 2)}>↑</button>
+          <button onClick={() => handleClick(ROCK, 2)}>→</button>
         </div>
       )}
     </div>

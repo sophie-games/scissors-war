@@ -5,8 +5,8 @@ import Shape from "./shape";
 export default class Base extends Shape {
   shapeType: ShapeType = BASE;
 
-  width = 100;
-  height = 100;
+  width = 96;
+  height = 96;
 
   maxHp = 1000;
   hp = 1000;

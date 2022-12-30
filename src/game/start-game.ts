@@ -1,6 +1,7 @@
 import * as PIXI from "pixi.js";
+import isTouchDevice from "is-touch-device";
+
 import { graphicMap } from "./entity/graphics/graphic-map";
-import GrSprite from "./entity/graphics/sprite";
 import Game from "./game";
 import { GameMode, TWO_PLAYERS } from "./game-modes";
 import Keyboard from "./keyboard";
@@ -8,10 +9,19 @@ import { BASE, PAPER, ROCK, SCISSORS } from "./shape-types";
 import UI from "./ui";
 import Vector2D from "./vector-2d";
 
-const SCREEN_WIDTH = 1280;
-const SCREEN_HEIGHT = 720;
+interface IStartGame {
+  mode: GameMode;
+  onFinish: () => any;
+  isTouch: boolean;
+}
 
-export function startGame(mode: GameMode, onFinish: () => any) {
+const WIDTH = 800;
+const HEIGHT = 600;
+const isHorizontalScreen = window.innerWidth > window.innerHeight;
+const SCREEN_WIDTH = isHorizontalScreen ? WIDTH : HEIGHT;
+const SCREEN_HEIGHT = isHorizontalScreen ? HEIGHT : WIDTH;
+
+export function startGame({ mode, onFinish, isTouch }: IStartGame) {
   // ---------------------------------------------------------- //
 
   const app = new PIXI.Application({
@@ -24,11 +34,20 @@ export function startGame(mode: GameMode, onFinish: () => any) {
   const stage = app.stage;
   stage.sortableChildren = true;
 
-  const player1BasePosition = new Vector2D(200, 200);
-  const player2BasePosition = new Vector2D(1080, 520);
+  const baseMargin = 150;
+  const player1BasePosition = new Vector2D(baseMargin, baseMargin);
+  const player2BasePosition = new Vector2D(
+    SCREEN_WIDTH - baseMargin,
+    SCREEN_HEIGHT - baseMargin
+  );
 
   const game = new Game(mode, player1BasePosition, player2BasePosition);
-  const ui = new UI({ game: game, container: app.stage });
+  const ui = new UI({
+    game: game,
+    container: app.stage,
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  });
 
   game.onShapeAdded((shape) => {
     const GrClass = graphicMap[shape.shapeType];
@@ -109,14 +128,16 @@ export function startGame(mode: GameMode, onFinish: () => any) {
 
     keysCallback.forEach((keyData) => {
       if (!keyData.cond()) return;
-
       const shape = keyData.shape();
       game.buyShape(shape);
     });
   });
 
-  return () => {
-    // This is only in case the user has gone to another tab without finishing the game.
-    if (app.stage) app.destroy();
+  return {
+    game,
+    finishCallback: () => {
+      // This is only in case the user has gone to another tab without finishing the game.
+      if (app.stage) app.destroy();
+    },
   };
 }

@@ -5,23 +5,24 @@ import {
   FaCaretSquareRight,
 } from "react-icons/fa";
 
+import "./style.css";
 import { SINGLE_PLAYER, TWO_PLAYERS } from "../../game/game-modes";
 
 export default function HomeView() {
   return (
-    <div>
+    <div className="HomeView">
       <div className="buttons-container">
-      <h2>
-        <Link to={{ pathname: "/game", search: `?mode=${SINGLE_PLAYER}` }}>
-          Single player
-        </Link>
-      </h2>
-      <span>&nbsp;-&nbsp;</span>
-      <h2>
-        <Link to={{ pathname: "/game", search: `?mode=${TWO_PLAYERS}` }}>
-          Two players
-        </Link>
-      </h2>
+        <h2>
+          <Link to={{ pathname: "/game", search: `?mode=${SINGLE_PLAYER}` }}>
+            Single player
+          </Link>
+        </h2>
+        <span>&nbsp;-&nbsp;</span>
+        <h2>
+          <Link to={{ pathname: "/game", search: `?mode=${TWO_PLAYERS}` }}>
+            Two players
+          </Link>
+        </h2>
       </div>
 
       <div className="instructions">

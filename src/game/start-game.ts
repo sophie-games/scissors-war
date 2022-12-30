@@ -15,9 +15,11 @@ interface IStartGame {
   isTouch: boolean;
 }
 
+const WIDTH = 800;
+const HEIGHT = 600;
 const isHorizontalScreen = window.innerWidth > window.innerHeight;
-const SCREEN_WIDTH = isHorizontalScreen ? 800 : 600;
-const SCREEN_HEIGHT = isHorizontalScreen ? 600 : 800;
+const SCREEN_WIDTH = isHorizontalScreen ? WIDTH : HEIGHT;
+const SCREEN_HEIGHT = isHorizontalScreen ? HEIGHT : WIDTH;
 
 export function startGame({ mode, onFinish, isTouch }: IStartGame) {
   // ---------------------------------------------------------- //

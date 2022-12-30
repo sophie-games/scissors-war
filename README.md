@@ -1,6 +1,6 @@
 # Scissors war
 
-Based on the classic game of rock, paper and scissors in this game you can play as one or two players.
+Based on the classic game of Rock Paper Scissors in this game you can play as one or two players.
 
 The objective is to destroy the big hand of the other player by sending to them hands of rock, paper and scissors, But keep in mind that they can also create them against you.
 

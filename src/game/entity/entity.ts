@@ -12,8 +12,8 @@ export default class Entity {
 
   public uuid: string;
 
-  width = 60;
-  height = 60;
+  width = 64;
+  height = 64;
 
   timeCreated = Date.now();
 

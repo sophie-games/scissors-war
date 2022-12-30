@@ -16,11 +16,10 @@ interface IStartGame {
 }
 
 const isHorizontalScreen = window.innerWidth > window.innerHeight;
+const SCREEN_WIDTH = isHorizontalScreen ? 800 : 600;
+const SCREEN_HEIGHT = isHorizontalScreen ? 600 : 800;
 
 export function startGame({ mode, onFinish, isTouch }: IStartGame) {
-  const SCREEN_WIDTH = isHorizontalScreen ? 1280 : 720;
-  const SCREEN_HEIGHT = isHorizontalScreen ? 720 : 1280;
-
   // ---------------------------------------------------------- //
 
   const app = new PIXI.Application({

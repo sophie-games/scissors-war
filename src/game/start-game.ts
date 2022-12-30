@@ -15,9 +15,11 @@ interface IStartGame {
   isTouch: boolean;
 }
 
+const isHorizontalScreen = window.innerWidth > window.innerHeight;
+
 export function startGame({ mode, onFinish, isTouch }: IStartGame) {
-  const SCREEN_WIDTH = !isTouch ? 1280 : 720;
-  const SCREEN_HEIGHT = !isTouch ? 720 : 1280;
+  const SCREEN_WIDTH = isHorizontalScreen ? 1280 : 720;
+  const SCREEN_HEIGHT = isHorizontalScreen ? 720 : 1280;
 
   // ---------------------------------------------------------- //
 
@@ -31,10 +33,11 @@ export function startGame({ mode, onFinish, isTouch }: IStartGame) {
   const stage = app.stage;
   stage.sortableChildren = true;
 
-  const player1BasePosition = new Vector2D(200, 200);
+  const baseMargin = 150;
+  const player1BasePosition = new Vector2D(baseMargin, baseMargin);
   const player2BasePosition = new Vector2D(
-    !isTouch ? 1080 : 520,
-    !isTouch ? 520 : 1080
+    SCREEN_WIDTH - baseMargin,
+    SCREEN_HEIGHT - baseMargin
   );
 
   const game = new Game(mode, player1BasePosition, player2BasePosition);

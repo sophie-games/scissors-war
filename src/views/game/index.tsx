@@ -1,6 +1,8 @@
 import isTouchDevice from "is-touch-device";
 import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router";
+
+import "./style.css";
 import Game from "../../game/game";
 import { GameMode, TWO_PLAYERS } from "../../game/game-modes";
 import { PAPER, ROCK, SCISSORS, ShapeType } from "../../game/shape-types";

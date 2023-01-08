@@ -27,7 +27,7 @@ export default function HomeView() {
 
       <div className="instructions">
         <p>
-          Based on the classic game of rock, paper and scissors in this game you
+          Based on the classic game of Rock Paper Scissors in this game you
           can play as one or two players.
         </p>
         <p>

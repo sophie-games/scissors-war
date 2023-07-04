@@ -6,13 +6,13 @@ The objective is to destroy the big hand of the other player by sending to them 
 
 To create rocks, papers or scissors you'll have to use the controls displayed. They'll cost you points, points that you'll earn by waiting and destroying the other player hands.
 
-The game is currently deployed on https://leoflood.github.io/scissors-war/.
+The game is currently deployed on https://sophie-games.github.io/scissors-war/.
 
 ## Installing and Running
 
 ```
-$ git clone https://github.com/leoflood/scissors-war
-$ cd scissors-war
-$ yarn
-$ yarn dev
+git clone https://github.com/sophie-games/scissors-war
+cd scissors-war
+yarn
+yarn dev
 ```
